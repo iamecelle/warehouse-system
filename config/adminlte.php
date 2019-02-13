@@ -1,6 +1,6 @@
 <?php
 
-use App\Student;
+use App\Product;
 
 return [
 
@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 2',
+    'title' => 'Warehouse Management System',
 
     'title_prefix' => '',
 
@@ -112,25 +112,20 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         // [
-        //     'text'        => 'Dashboard',
-        //     'url'         => 'admin/dashboard',
-        //     'icon'        => 'dashboard',
+        //     'text'        => 'Students',
+        //     'url'         => 'admin/students',
+        //     'icon'        => 'users',
         // ],
-        [
-            'text'        => 'Sections',
-            'url'         => 'admin/students',
-            'icon'        => 'users',
-        ],
-        [
-            'text'        => 'Products',
-            'url'         => 'admin/courses',
-            'icon'        => 'book',
-        ],
-        [
-            'text'        => 'Locations',
-            'url'         => 'admin/departments',
-            'icon'        => 'building',
-        ],
+        // [
+        //     'text'        => 'Courses',
+        //     'url'         => 'admin/courses',
+        //     'icon'        => 'book',
+        // ],
+        // [
+        //     'text'        => 'Departments',
+        //     'url'         => 'admin/departments',
+        //     'icon'        => 'building',
+        // ],
         // 'ACCOUNT SETTINGS',
         // [
         //     'text' => 'Profile',
