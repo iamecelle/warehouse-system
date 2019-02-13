@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function(){
-	// Route::get('dashboard', 'HomeController@dashboard')->name('dashboard');
+	Route::get('dashboard', 'HomeController@dashboard')->name('dashboard');
 
 	Route::resource('products', 'ProductsController');
 
@@ -24,6 +24,6 @@ Route::group(['prefix' => 'admin'], function(){
 	Route::resource('locations', 'LocationsController');
 });
 
-// Route::group(['prefix' => 'raw-json-datas'], function(){
-// 	Route::get('students-list', 'StudentsController@list')->name('students.list');
-// });
+Route::group(['prefix' => 'raw-json-datas'], function(){
+	Route::get('products-list', 'ProductsController@list')->name('products.list');
+});
