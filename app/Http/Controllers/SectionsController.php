@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Course, App\Department, App\Student;
+use App\Section, App\Location, App\Product;
 use Illuminate\Http\Request;
 
-class CoursesController extends Controller
+class SectionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,15 +21,15 @@ class CoursesController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $courses = Course::where('course_code', 'LIKE', "%$keyword%")
-                ->orWhere('course_description', 'LIKE', "%$keyword%")
-                ->orWhere('department_id', 'LIKE', "%$keyword%")
+            $sections = Section::where('name', 'LIKE', "%$keyword%")
+                ->orWhere('description', 'LIKE', "%$keyword%")
+                ->orWhere('location_id', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $courses = Course::latest()->paginate($perPage);
+            $sections = Section::latest()->paginate($perPage);
         }
 
-        return view('admin.courses.index', compact('courses'));
+        return view('admin.sections.index', compact('sections'));
     }
 
     /**
@@ -39,9 +39,9 @@ class CoursesController extends Controller
      */
     public function create()
     {
-        $departments = Department::get()->pluck('short_code', 'id');
-
-        return view('admin.courses.create', compact('departments'));
+        $locations = Location::get()->pluck('name', 'id');
+        // dd($locations);
+        return view('admin.sections.create', compact('locations'));
     }
 
     /**
@@ -54,14 +54,14 @@ class CoursesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'course_code' => 'required',
-			'course_description' => 'required'
+			'name' => 'required',
+			'description' => 'required'
 		]);
         $requestData = $request->all();
         
-        Course::create($requestData);
+        Section::create($requestData);
 
-        return redirect('admin/courses')->with('flash_message', 'Course added!');
+        return redirect('admin/sections')->with('flash_message', 'Section added!');
     }
 
     /**
@@ -73,21 +73,21 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
-        $course = Course::findOrFail($id);
+        $section = Section::findOrFail($id);
 
-        // $students = Course::join('students', 'courses.id', '=', 'students.course_id')
-        //     ->where('courses.id', $id)
+        // $products = Section::join('products', 'sections.id', '=', 'products.section_id')
+        //     ->where('sections.id', $id)
         //     ->get();
 
-        $students = Student::with('course')
-            ->where('course_id', $id)
+        $products = Product::with('section')
+            ->where('section_id', $id)
             ->get();
 
-        // return $students;
+        // return $products;
 
-        // return $students;
+        // return $products;
 
-        return view('admin.courses.show', compact('course'))->with('students', $students);
+        return view('admin.sections.show', compact('section'))->with('products', $products);
     }
 
     /**
@@ -99,9 +99,10 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        $course = Course::findOrFail($id);
+        $section = Section::findOrFail($id);
+        $locations = Section::get()->pluck('name', 'id');
 
-        return view('admin.courses.edit', compact('course'));
+        return view('admin.sections.edit', compact('section'))->with('locations', $locations);
     }
 
     /**
@@ -115,15 +116,15 @@ class CoursesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'course_code' => 'required',
-			'course_description' => 'required'
+			'name' => 'required',
+			'description' => 'required'
 		]);
         $requestData = $request->all();
         
-        $course = Course::findOrFail($id);
-        $course->update($requestData);
+        $section = Section::findOrFail($id);
+        $section->update($requestData);
 
-        return redirect('admin/courses')->with('flash_message', 'Course updated!');
+        return redirect('admin/sections')->with('flash_message', 'Section updated!');
     }
 
     /**
@@ -135,8 +136,8 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        Course::destroy($id);
+        Section::destroy($id);
 
-        return redirect('admin/courses')->with('flash_message', 'Course deleted!');
+        return redirect('admin/sections')->with('flash_message', 'Section deleted!');
     }
 }
