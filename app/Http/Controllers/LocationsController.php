@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Department;
+use App\Location;
 use Illuminate\Http\Request;
 
-class DepartmentsController extends Controller
+class LocationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,14 +21,14 @@ class DepartmentsController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $departments = Department::where('short_code', 'LIKE', "%$keyword%")
+            $locations = Location::where('short_code', 'LIKE', "%$keyword%")
                 ->orWhere('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $departments = Department::latest()->paginate($perPage);
+            $locations = Location::latest()->paginate($perPage);
         }
 
-        return view('admin.departments.index', compact('departments'));
+        return view('admin.locations.index', compact('locations'));
     }
 
     /**
@@ -38,7 +38,7 @@ class DepartmentsController extends Controller
      */
     public function create()
     {
-        return view('admin.departments.create');
+        return view('admin.locations.create');
     }
 
     /**
@@ -51,14 +51,14 @@ class DepartmentsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'short_code' => 'required',
-			'name' => 'required'
+			'name' => 'required',
+			'address' => 'required'
 		]);
         $requestData = $request->all();
         
-        Department::create($requestData);
+        Location::create($requestData);
 
-        return redirect('admin/departments')->with('flash_message', 'Department added!');
+        return redirect('admin/locations')->with('flash_message', 'location added!');
     }
 
     /**
@@ -70,10 +70,10 @@ class DepartmentsController extends Controller
      */
     public function show($id)
     {
-        $department = Department::findOrFail($id);
+        $location = Location::findOrFail($id);
 
-        // return $department;
-        return view('admin.departments.show', compact('department'));
+        // return $location;
+        return view('admin.locations.show', compact('location'));
     }
 
     /**
@@ -85,9 +85,9 @@ class DepartmentsController extends Controller
      */
     public function edit($id)
     {
-        $department = Department::findOrFail($id);
+        $location = Location::findOrFail($id);
 
-        return view('admin.departments.edit', compact('department'));
+        return view('admin.locations.edit', compact('location'));
     }
 
     /**
@@ -101,15 +101,15 @@ class DepartmentsController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'short_code' => 'required',
-			'name' => 'required'
+			'name' => 'required',
+			'address' => 'required'
 		]);
         $requestData = $request->all();
         
-        $department = Department::findOrFail($id);
-        $department->update($requestData);
+        $location = Location::findOrFail($id);
+        $location->update($requestData);
 
-        return redirect('admin/departments')->with('flash_message', 'Department updated!');
+        return redirect('admin/locations')->with('flash_message', 'location updated!');
     }
 
     /**
@@ -121,8 +121,8 @@ class DepartmentsController extends Controller
      */
     public function destroy($id)
     {
-        Department::destroy($id);
+        Location::destroy($id);
 
-        return redirect('admin/departments')->with('flash_message', 'Department deleted!');
+        return redirect('admin/locations')->with('flash_message', 'location deleted!');
     }
 }
